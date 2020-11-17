@@ -1,39 +1,83 @@
-var wall, car;
-var deformation, speed, weight;
+var fixedRect, movingRect;
+var gameObj1, gameObj2, gameObj3, gameObj4;
 
 function setup() {
-  createCanvas(1600,400);
+  createCanvas(800,400);
+  fixedRect = createSprite(200,200,50,50);
+  fixedRect.shapeColor = "red";
+  fixedRect.debug = true;
 
-  wall = createSprite(1500, 200, 60, height/2);
-  wall.shapeColor = "brown";
+  movingRect = createSprite(400,200,80,30);
+  movingRect.shapeColor = "red";
+  movingRect.debug = true;
 
-  car = createSprite(50, 200, 50, 50);
-  car.shapeColor = "white";
-  car.velocityX = speed;
+  movingRect.velocityX = -5;
+  fixedRect.velocityX = 0;
 
-  speed = Math.round(random(55, 90));
-  weight = Math.round(random(400, 1500));
+  gameObj1 = createSprite(100,100,50,50);
+  gameObj1.shapeColor = "cyan";
 
-  deformation = 0.5*speed*speed/22500;
- 
+  gameObj2 = createSprite(200,100,50,50);
+  gameObj2.shapeColor = "cyan";
+
+  gameObj3 = createSprite(300,100,50,50);
+  gameObj3.shapeColor = "cyan";
+
+  gameObj4 = createSprite(400,100,50,50);
+  gameObj4.shapeColor = "cyan";
+  
+}
+
 function draw() {
-  background(255,255,255); 
+  background("lightblue");  
 
-  if(wall.x-car.x < (car.width+wall.width)){
-    if(deformation<100){
-      car.shapeColor = "green";
-    }
-  
-    if(deformation>100 && deformation<180){
-      car.shapeColor = "yellow";
-    }
-  
-    if(deformation>180){
-      car.shapeColor = "red";
-    }
-    }
+
+
+ 
+
+  /*if(isTouching(movingRect, gameObj1)){
+    movingRect.shapeColor = 'purple';
+    gameObj1.shapeColor = 'purple';
+  }
+  else {
+    movingRect.shapeColor = "red";
+    gameObj1.shapeColor = "red";
+  }*/
+  bounceOff(movingRect,fixedRect);
+  drawSprites();
+
+    
+}
+
+function isTouching(object1, object2){
+  if(object1.x - object2.x < object2.width/2 + object1.width/2 &&
+    object2.x - object1.x  < object2.width/2 + object1.width/2 &&
+    object1.y - object2.y < object2.height/2 + object1.height/2 &&
+    object2.y - object1.y < object2.height/2 + object1.height/2){
+    
+      return true;
+  }
+  else{
+    
+    return false;
   }
   
+}
 
-  drawSprites();
+function bounceOff(object1, object2){
+  if(object1.x - object2.x < object2.width/2 + object1.width/2 &&
+    object2.x - object1.x  < object2.width/2 + object1.width/2){
+
+      object1.velocityX = object1.velocityX * (-1);
+      object2.velocityX = object2.velocityX * (-1);
+    }
+    
+    if(object1.y - object2.y < object2.height/2 + object1.height/2 &&
+      object2.y - object1.y < object2.height/2 + object1.height/2){
+
+        object1.velocityY = object1.velocityY * (-1);
+        object2.velocityY = object2.velocityY * (-1);
+
+      }
+  
 }
